@@ -61,6 +61,7 @@ const Editor = ({ settings, onChange, input, value }: EditorProps) => {
 
   useEffect(() => {
     if (value) {
+      console.log(value);
       setBlocks(parse(value));
     }
   }, [value]);
@@ -74,35 +75,33 @@ const Editor = ({ settings, onChange, input, value }: EditorProps) => {
   };
 
   return (
-    <StrictMode>
-      <SlotFillProvider>
-        <ShortcutProvider>
-          <div className="block-editor">
-            <KeyboardShortcuts.Register />
-            <KeyboardShortcuts />
+    <SlotFillProvider>
+      <ShortcutProvider>
+        <div className="block-editor">
+          <KeyboardShortcuts.Register />
+          <KeyboardShortcuts />
 
-            <Header toggleSidebar={toggleSidebar} sidebarOpen={sidebarOpen} />
+          <Header toggleSidebar={toggleSidebar} sidebarOpen={sidebarOpen} />
 
-            <div
-              className="block-editor__content"
-              style={{ height: settings.height }}
-            >
-              <BlockEditor
-                blocks={blocks}
-                onChange={setBlocks}
-                undo={undo}
-                redo={redo}
-                canUndo={canUndo}
-                canRedo={canRedo}
-                settings={settings}
-              />
+          <div
+            className="block-editor__content"
+            style={{ height: settings.height }}
+          >
+            <BlockEditor
+              blocks={blocks}
+              onChange={setBlocks}
+              undo={undo}
+              redo={redo}
+              canUndo={canUndo}
+              canRedo={canRedo}
+              settings={settings}
+            />
 
-              {sidebarOpen && <Sidebar />}
-            </div>
+            {sidebarOpen && <Sidebar />}
           </div>
-        </ShortcutProvider>
-      </SlotFillProvider>
-    </StrictMode>
+        </div>
+      </ShortcutProvider>
+    </SlotFillProvider>
   );
 };
 
