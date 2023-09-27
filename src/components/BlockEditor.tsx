@@ -8,7 +8,6 @@ import {
   ObserveTyping,
   WritingFlow,
   BlockEditorKeyboardShortcuts,
-  ListView,
 } from "@wordpress/block-editor";
 import { ToolbarButton, Popover } from "@wordpress/components";
 
@@ -85,7 +84,6 @@ const BlockEditor = ({
             disabled={!canRedo}
             className={"history-button"}
           />
-          <ListView />
         </Header.Fill>
         <Sidebar.Fill>
           <BlockInspector />

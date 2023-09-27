@@ -61,7 +61,6 @@ const Editor = ({ settings, onChange, input, value }: EditorProps) => {
 
   useEffect(() => {
     if (value) {
-      console.log(value);
       setBlocks(parse(value));
     }
   }, [value]);

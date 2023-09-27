@@ -1,10 +1,7 @@
 import "../src/styles.scss";
 import * as BlockEditor from "../src/index";
-import list from "./list";
-import listItem from "./list-item";
 
 const { hooks } = BlockEditor.wordpress;
-const { domReady } = BlockEditor.wordpress;
 
 hooks.addFilter(
   "blocks.registerBlockType",
@@ -804,6 +801,3 @@ const settings = {
 };
 
 BlockEditor.initializeEditor(element, settings);
-
-list();
-listItem();
