@@ -1,4 +1,6 @@
-import { StrictMode, createElement, useRef } from "@wordpress/element";
+import { createElement, useRef, useCallback } from "@wordpress/element";
+import { store as keyboardShortcutsStore } from "@wordpress/keyboard-shortcuts";
+
 import {
   BlockEditorProvider,
   BlockInspector,
@@ -9,9 +11,16 @@ import {
   WritingFlow,
   BlockEditorKeyboardShortcuts,
 } from "@wordpress/block-editor";
-import { ToolbarButton, Popover } from "@wordpress/components";
+import {
+  ToolbarButton,
+  Popover,
+  Button,
+  ToolbarItem,
+} from "@wordpress/components";
 
-import { undo as undoIcon, redo as redoIcon } from "@wordpress/icons";
+import { withDispatch, useDispatch, useSelect } from "@wordpress/data";
+
+import { undo as undoIcon, redo as redoIcon, listView } from "@wordpress/icons";
 
 import Header from "./Header";
 import Sidebar from "./Sidebar";
@@ -19,6 +28,8 @@ import InserterToggle from "./InserterToggle";
 import EditorSettings from "../interfaces/editor-settings";
 import Block from "../interfaces/block";
 import Notices from "./Notices";
+
+import BlockNavigationDropdown from "./BlockNavigationDropdown";
 
 import "@wordpress/format-library";
 
@@ -84,6 +95,7 @@ const BlockEditor = ({
             disabled={!canRedo}
             className={"history-button"}
           />
+          <ToolbarItem as={BlockNavigationDropdown} isDisabled={false} />
         </Header.Fill>
         <Sidebar.Fill>
           <BlockInspector />
