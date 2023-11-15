@@ -32,15 +32,20 @@ export interface EditorProps {
 
 const Editor = ({ settings, onChange, input, value }: EditorProps) => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const { setBlocks, undo, redo } = useDispatch("block-editor");
+  const { setBlocks, undo, redo, setEditorMode, setIsInserterOpened } =
+    useDispatch("laraberg-editor");
 
-  const { blocks, canUndo, canRedo } = useSelect((select) => {
-    return {
-      blocks: select("block-editor").getBlocks(),
-      canUndo: select("block-editor").canUndo(),
-      canRedo: select("block-editor").canRedo(),
-    };
-  });
+  const { blocks, canUndo, canRedo, getEditorMode, isInserterOpen } = useSelect(
+    (select) => {
+      return {
+        blocks: select("laraberg-editor").getBlocks(),
+        canUndo: select("laraberg-editor").canUndo(),
+        canRedo: select("laraberg-editor").canRedo(),
+        getEditorMode: select("laraberg-editor").getEditorMode(),
+        isInserterOpen: select("laraberg-editor").isInserterOpened(),
+      };
+    }
+  );
 
   useEffect(() => {
     registerBlocks(settings.disabledCoreBlocks);
@@ -80,7 +85,12 @@ const Editor = ({ settings, onChange, input, value }: EditorProps) => {
           <KeyboardShortcuts.Register />
           <KeyboardShortcuts />
 
-          <Header toggleSidebar={toggleSidebar} sidebarOpen={sidebarOpen} />
+          <Header
+            toggleSidebar={toggleSidebar}
+            sidebarOpen={sidebarOpen}
+            editorMode={getEditorMode}
+            setEditorMode={setEditorMode}
+          />
 
           <div
             className="block-editor__content"
@@ -94,9 +104,12 @@ const Editor = ({ settings, onChange, input, value }: EditorProps) => {
               canUndo={canUndo}
               canRedo={canRedo}
               settings={settings}
+              editorMode={getEditorMode}
+              isInserterOpen={isInserterOpen}
+              setIsInserterOpened={setIsInserterOpened}
             />
 
-            {sidebarOpen && <Sidebar />}
+            {sidebarOpen && getEditorMode !== "text" && <Sidebar />}
           </div>
         </div>
       </ShortcutProvider>
@@ -105,7 +118,7 @@ const Editor = ({ settings, onChange, input, value }: EditorProps) => {
 };
 
 const removeEditor = (element: HTMLInputElement | HTMLTextAreaElement) => {
-  dispatch("block-editor").setBlocks([]);
+  dispatch("laraberg-editor").setBlocks([]);
   dispatch("core/blocks").removeBlockTypes(
     select("core/blocks")
       .getBlockTypes()

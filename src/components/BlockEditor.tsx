@@ -32,6 +32,7 @@ import Notices from "./Notices";
 import BlockNavigationDropdown from "./BlockNavigationDropdown";
 
 import "@wordpress/format-library";
+import TextEditor from "./TextEditor";
 
 interface BlockEditorProps {
   settings: EditorSettings;
@@ -41,6 +42,9 @@ interface BlockEditorProps {
   redo?: () => void;
   canUndo?: boolean;
   canRedo?: boolean;
+  editorMode?: string;
+  isInserterOpen: boolean;
+  setIsInserterOpened: (isOpen: boolean) => void;
 }
 
 const BlockEditor = ({
@@ -51,6 +55,9 @@ const BlockEditor = ({
   redo,
   canUndo,
   canRedo,
+  editorMode,
+  isInserterOpen,
+  setIsInserterOpened,
 }: BlockEditorProps) => {
   const inputTimeout = useRef<NodeJS.Timeout | null>(null);
 
@@ -82,34 +89,45 @@ const BlockEditor = ({
       >
         <Notices />
         <Header.Fill>
-          <Inserter renderToggle={InserterToggle} />
+          <Inserter
+            renderToggle={(props) => (
+              <InserterToggle {...props} editorMode={editorMode} />
+            )}
+          />
           <ToolbarButton
             icon={undoIcon}
             onClick={undo}
-            disabled={!canUndo}
+            disabled={!canUndo || editorMode === "text"}
             className={"history-button"}
           />
           <ToolbarButton
             icon={redoIcon}
             onClick={redo}
-            disabled={!canRedo}
+            disabled={!canRedo || editorMode === "text"}
             className={"history-button"}
           />
-          <ToolbarItem as={BlockNavigationDropdown} isDisabled={false} />
+          <ToolbarItem
+            as={BlockNavigationDropdown}
+            isDisabled={editorMode === "text"}
+          />
         </Header.Fill>
         <Sidebar.Fill>
           <BlockInspector />
         </Sidebar.Fill>
-        <BlockTools>
-          <BlockEditorKeyboardShortcuts.Register />
-          <div className="editor-styles-wrapper">
-            <WritingFlow>
-              <ObserveTyping>
-                <BlockList />
-              </ObserveTyping>
-            </WritingFlow>
-          </div>
-        </BlockTools>
+        {editorMode === "text" && <TextEditor />}
+        {editorMode === "visual" && (
+          <BlockTools>
+            <BlockEditorKeyboardShortcuts.Register />
+            <div className="editor-styles-wrapper">
+              <WritingFlow>
+                <ObserveTyping>
+                  <BlockList />
+                </ObserveTyping>
+              </WritingFlow>
+            </div>
+          </BlockTools>
+        )}
+
         <Popover.Slot />
       </BlockEditorProvider>
     </div>

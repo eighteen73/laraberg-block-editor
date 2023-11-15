@@ -4,7 +4,7 @@
 # This scripts extracts the Gutenberg package versions from a Gutenberg release directory #
 ###########################################################################################
 
-GUTENBERG_DIR=$1
+GUTENBERG_DIR="/Users/bruce/Desktop/gutenberg"
 PACKAGES_DIR="$GUTENBERG_DIR/packages"
 PACKAGES=(
   "api-fetch"
@@ -12,9 +12,11 @@ PACKAGES=(
   "block-editor"
   "block-library"
   "blocks"
+  "i18n"
   "components"
   "data"
   "element"
+  "interface"
   "format-library"
   "hooks"
   "keyboard-shortcuts"
