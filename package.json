@@ -19,6 +19,7 @@
   "engines": {
     "node": ">= 18"
   },
+  "engineStrict": true,
   "scripts": {
     "clean": "rm -rf dist",
     "test": "echo \"Error: no test specified\" && exit 1",
